@@ -1,0 +1,21 @@
+[project]
+name = "studently-ai"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "Muhammad Sohaib", email = "msohaib.programmer@gmail.com" }
+]
+requires-python = ">=3.11"
+dependencies = [
+    "chainlit>=2.5.5",
+    "litellm==1.65.0",
+    "openai-agents>=0.0.14",
+]
+
+[project.scripts]
+studently-ai = "studently_ai:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
