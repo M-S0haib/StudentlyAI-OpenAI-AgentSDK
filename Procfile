@@ -1,0 +1,1 @@
+web: chainlit run StudentlyAI.py --port $PORT
