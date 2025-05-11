@@ -1,7 +1,7 @@
 [project]
-name = "studently-ai"
+name = "studently_ai"
 version = "0.1.0"
-description = "Add your description here"
+description = "AI-powered study assistant built with Python, Chainlit, and LiteLLM"
 readme = "README.md"
 authors = [
     { name = "Muhammad Sohaib", email = "msohaib.programmer@gmail.com" }
@@ -14,7 +14,7 @@ dependencies = [
 ]
 
 [project.scripts]
-studently-ai = "studently_ai:main"
+studently_ai = "studently_ai:main"
 
 [build-system]
 requires = ["hatchling"]
