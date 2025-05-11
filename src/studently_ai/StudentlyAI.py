@@ -23,7 +23,6 @@ if os.getenv("GEMINI_API_KEY") is None:
 
 set_tracing_disabled(disabled=True)
 
-conversation_history = []
 
 class NotStudyQuery(BaseModel):
     is_not_study_query: bool
@@ -79,15 +78,20 @@ async def start():
         content="🎓 Hey! Welcome to **Studently AI**. I'm here to help you with your studies. Ask me anything!"
     ).send()
 
+    cl.user_session.set("chat_history", [])
+
 
 @cl.on_message
 async def on_message(message: cl.Message):
+
+    chat_history = cl.user_session.get("chat_history")
+
     try:
         user_input = message.content
-        conversation_history.append({"role": "user", "content": user_input})
+        chat_history.append({"role": "user", "content": user_input})
 
         history_prompt = "\n".join(
-            f"{msg['role'].capitalize()}: {msg['content']}" for msg in conversation_history
+            f"{msg['role'].capitalize()}: {msg['content']}" for msg in chat_history
         )
         combined_input = f"Conversation history:\n{history_prompt}\n\nCurrent input: {user_input}"
 
@@ -97,6 +101,9 @@ async def on_message(message: cl.Message):
             await cl.Message(
                 content="Sorry! You are asking something other than study-related questions. Please ask a study-related question."
             ).send()
+            chat_history.append(
+                {"role": "assistant", "content": "Sorry! You are asking something other than study-related questions. Please ask a study-related question."}
+            )
             return
 
         result = Runner.run_streamed(agent, combined_input)
@@ -108,9 +115,12 @@ async def on_message(message: cl.Message):
                 token = event.data.delta
                 await response.stream_token(token)
 
-        conversation_history.append({"role": "assistant", "content": response.content})
+        chat_history.append({"role": "assistant", "content": response.content})
 
     except InputGuardrailTripwireTriggered as e:
         await cl.Message(
             content="Sorry! You are asking something other than study-related questions. Please ask a study-related question."
         ).send()
+        chat_history.append(
+            {"role": "assistant", "content": "Sorry! You are asking something other than study-related questions. Please ask a study-related question."}
+        )
