@@ -10,4 +10,4 @@ RUN pip install -e .
 ENV HOST=0.0.0.0
 ENV PORT=8000
 
-CMD ["chainlit", "run", "src/studently_ai/StudentlyAI.py", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["chainlit", "run", "src/studently_ai/main.py", "--host", "0.0.0.0", "--port", "8000"]
